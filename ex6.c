@@ -6,14 +6,12 @@
 #define TAMANHO_MAXIMO_NOME 50
 #define MAX_FUNCIONARIOS 100
 
-// Definição da estrutura de registro de funcionário
 struct Funcionario {
     char nome[TAMANHO_MAXIMO_NOME];
     int idade;
     float salario;
 };
 
-// Função para adicionar um novo registro de funcionário ao arquivo
 void adicionarRegistro(FILE *arquivo) {
     struct Funcionario novoFuncionario;
 
@@ -29,7 +27,6 @@ void adicionarRegistro(FILE *arquivo) {
     scanf("%f", &novoFuncionario.salario);
     while (getchar() != '\n'); // Limpa o buffer de entrada
 
-    // Escreve o novo registro no arquivo
     if (fwrite(&novoFuncionario, sizeof(struct Funcionario), 1, arquivo) != 1) {
         printf("Erro ao adicionar registro.\n");
     } else {
@@ -37,10 +34,9 @@ void adicionarRegistro(FILE *arquivo) {
     }
 }
 
-// Função para listar todos os registros de funcionários no arquivo
-void listarRegistros(FILE *arquivo) {
-    rewind(arquivo); // Volta ao início do arquivo
 
+void listarRegistros(FILE *arquivo) {
+    rewind(arquivo); 
     struct Funcionario funcionario;
 
     printf("\n=== Registros de Funcionarios ===\n");
@@ -52,9 +48,8 @@ void listarRegistros(FILE *arquivo) {
     }
 }
 
-// Função para buscar registros de funcionários por nome
 void buscarPorNome(FILE *arquivo, char *nomeBusca) {
-    rewind(arquivo); // Volta ao início do arquivo
+    rewind(arquivo); 
 
     struct Funcionario funcionario;
     int encontrado = 0;
@@ -76,9 +71,7 @@ void buscarPorNome(FILE *arquivo, char *nomeBusca) {
 }
 
 
-// Função para salvar os registros de funcionários no arquivo
 void salvarFuncionarios(FILE *arquivo, struct Funcionario *novosFuncionarios, int numNovosFuncionarios) {
-    // Move para o final do arquivo para adicionar novos registros
     fseek(arquivo, 0, SEEK_END);
 
     for (int i = 0; i < numNovosFuncionarios; i++) {
@@ -111,7 +104,7 @@ void salvarFuncionarios(FILE *arquivo, struct Funcionario *novosFuncionarios, in
         printf("5. Sair\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
-        while (getchar() != '\n'); // Limpa o buffer de entrada
+        while (getchar() != '\n');
 
         switch (opcao) {
             case 1:
@@ -128,7 +121,7 @@ void salvarFuncionarios(FILE *arquivo, struct Funcionario *novosFuncionarios, in
             case 3:
                 printf("Digite o nome a ser buscado: ");
                 fgets(nomeBusca, TAMANHO_MAXIMO_NOME, stdin);
-                nomeBusca[strcspn(nomeBusca, "\n")] = '\0'; // Remove a nova linha do final
+                nomeBusca[strcspn(nomeBusca, "\n")] = '\0'; 
                 buscarPorNome(arquivo, nomeBusca);
                 break;
             case 4:
