@@ -7,7 +7,6 @@ int main() {
     printf("Quantos elementos você deseja inserir no array? ");
     scanf("%d", &n);
 
-    // Declara o array
     float array[n];
 
     for (i = 0; i < n; i++) {
