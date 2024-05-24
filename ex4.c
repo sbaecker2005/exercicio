@@ -12,6 +12,10 @@ int **alocarMatriz(int linhas, int colunas) {
         matriz[i] = (int *)malloc(colunas * sizeof(int));
         if (matriz[i] == NULL) {
             printf("Erro ao alocar memória para as colunas da matriz\n");
+            for (int j = 0; j < i; j++) {
+                free(matriz[j]);
+            }
+            free(matriz);
             exit(1);
         }
     }
@@ -70,11 +74,20 @@ void imprimirMatriz(int **matriz, int linhas, int colunas) {
 int main() {
     int linhas1, colunas1, linhas2, colunas2;
 
-    printf("Digite o número de linhas e colunas da primeira matriz: ");
-    scanf("%d %d", &linhas1, &colunas1);
+    printf("Digite o número de linhas da primeira matriz: ");
+    scanf("%d", &linhas1);
+    printf("Digite o número de colunas da primeira matriz: ");
+    scanf("%d", &colunas1);
 
-    printf("Digite o número de linhas e colunas da segunda matriz: ");
-    scanf("%d %d", &linhas2, &colunas2);
+    printf("Digite o número de linhas da segunda matriz: ");
+    scanf("%d", &linhas2);
+    printf("Digite o número de colunas da segunda matriz: ");
+    scanf("%d", &colunas2);
+
+    if (colunas1 != linhas2) {
+        printf("Erro: As matrizes não podem ser multiplicadas devido às dimensões inconsistentes.\n");
+        return 1;
+    }
 
     int **matriz1 = alocarMatriz(linhas1, colunas1);
     int **matriz2 = alocarMatriz(linhas2, colunas2);
@@ -97,16 +110,16 @@ int main() {
     if (resultadoMultiplicacao != NULL) {
         printf("Resultado da multiplicação das matrizes:\n");
         imprimirMatriz(resultadoMultiplicacao, linhas1, colunas2);
+        liberarMatriz(resultadoMultiplicacao, linhas1);
     }
 
     printf("\nTransposta da primeira matriz:\n");
     int **transposta = transporMatriz(matriz1, linhas1, colunas1);
     imprimirMatriz(transposta, colunas1, linhas1);
+    liberarMatriz(transposta, colunas1);
 
     liberarMatriz(matriz1, linhas1);
     liberarMatriz(matriz2, linhas2);
-    liberarMatriz(resultadoMultiplicacao, linhas1);
-    liberarMatriz(transposta, colunas1);
 
     return 0;
 }
