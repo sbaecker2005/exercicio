@@ -2,43 +2,55 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_FUNCIONARIOS 5
-
-struct Funcionario {
-    char nome[50];
+typedef struct {
+    char nome[100];
     int idade;
-    float salario;
-};
+} Pessoa;
 
-int compararIdade(const void *a, const void *b) {
-    const struct Funcionario *funcionarioA = (const struct Funcionario *)a;
-    const struct Funcionario *funcionarioB = (const struct Funcionario *)b;
-
-    return funcionarioA->idade - funcionarioB->idade;
+int compararPorIdade(const void *a, const void *b) {
+    Pessoa *pessoaA = (Pessoa *)a;
+    Pessoa *pessoaB = (Pessoa *)b;
+    return pessoaA->idade - pessoaB->idade;
 }
 
-void imprimirFuncionarios(struct Funcionario funcionarios[], int numFuncionarios) {
-    for (int i = 0; i < numFuncionarios; i++) {
-        printf("Nome: %s, Idade: %d, Salario: %.2f\n", funcionarios[i].nome, funcionarios[i].idade, funcionarios[i].salario);
+void imprimirPessoas(Pessoa *pessoas, int tamanho) {
+    for (int i = 0; i < tamanho; i++) {
+        printf("Nome: %s, Idade: %d\n", pessoas[i].nome, pessoas[i].idade);
     }
 }
 
 int main() {
-    struct Funcionario funcionarios[MAX_FUNCIONARIOS] = {
-        {"Joao", 25, 2500.0},
-        {"Maria", 30, 2800.0},
-        {"Pedro", 22, 2200.0},
-        {"Ana", 35, 3000.0},
-        {"Carlos", 28, 2700.0}
-    };
+    int n;
 
-    printf("Funcionarios antes da ordenacao:\n");
-    imprimirFuncionarios(funcionarios, MAX_FUNCIONARIOS);
+    printf("Digite o número de pessoas: ");
+    scanf("%d", &n);
+    getchar(); 
 
-    qsort(funcionarios, MAX_FUNCIONARIOS, sizeof(struct Funcionario), compararIdade);
+    Pessoa *pessoas = (Pessoa *)malloc(n * sizeof(Pessoa));
+    if (pessoas == NULL) {
+        printf("Erro ao alocar memória\n");
+        return 1;
+    }
 
-    printf("\nFuncionarios depois da ordenacao por idade:\n");
-    imprimirFuncionarios(funcionarios, MAX_FUNCIONARIOS);
+    for (int i = 0; i < n; i++) {
+        printf("Digite o nome da pessoa %d: ", i + 1);
+        fgets(pessoas[i].nome, 100, stdin);
+        size_t len = strlen(pessoas[i].nome);
+        if (len > 0 && pessoas[i].nome[len - 1] == '\n') {
+            pessoas[i].nome[len - 1] = '\0';
+        }
+
+        printf("Digite a idade da pessoa %d: ", i + 1);
+        scanf("%d", &pessoas[i].idade);
+        getchar(); // Limpa o buffer do '\n' deixado pelo scanf
+    }
+
+    qsort(pessoas, n, sizeof(Pessoa), compararPorIdade);
+
+    printf("\nPessoas ordenadas por idade:\n");
+    imprimirPessoas(pessoas, n);
+
+    free(pessoas);
 
     return 0;
 }
